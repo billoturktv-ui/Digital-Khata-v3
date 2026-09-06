@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" />
+<title>DigiKhata — Liquid Glass Ledger</title>
+<meta name="description" content="Customer ledger / Khata management app for small shop owners." />
+<link rel="manifest" href="manifest.json" />
+<meta name="theme-color" content="#0B1120" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="DigiKhata" />
+<link rel="apple-touch-icon" href="icons/icon-192.png" />
+<link rel="icon" href="icons/icon-192.png" />
+<link rel="stylesheet" href="vendor/styles.css" />
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap');
+  .theme-dark { --bg-grad-1:#0B1120; --bg-grad-2:#131B2E; --glass-bg:rgba(255,255,255,0.06); --glass-border:rgba(255,255,255,0.14); --glass-bg-strong:rgba(28,36,56,0.88); --text-primary:#E9EDF4; --text-secondary:#8D9AB0; --accent:#F5A524; --positive:#34D399; --negative:#FB7185; --shadow:0 8px 32px rgba(0,0,0,0.35); }
+  .theme-light { --bg-grad-1:#EEF1F6; --bg-grad-2:#E2E7F0; --glass-bg:rgba(255,255,255,0.55); --glass-border:rgba(15,23,42,0.08); --glass-bg-strong:rgba(255,255,255,0.9); --text-primary:#12182B; --text-secondary:#5B6478; --accent:#D9840F; --positive:#0F9D67; --negative:#DC3E56; --shadow:0 8px 32px rgba(15,23,42,0.1); }
+  * { font-family: 'Inter', sans-serif; box-sizing: border-box; }
+  .font-display { font-family: 'Outfit', sans-serif; }
+  .glass { background: var(--glass-bg); border: 1px solid var(--glass-border); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); box-shadow: var(--shadow); }
+  ::-webkit-scrollbar { width: 0; height: 0; }
+  input::placeholder, textarea::placeholder { color: var(--text-secondary); opacity: 0.55; }
+  input, textarea, select { font-family: 'Inter', sans-serif; }
+  select option { background: #1c2438; color: #E9EDF4; }
+  @keyframes shake { 0%,100%{transform:translateX(0);} 25%{transform:translateX(-6px);} 75%{transform:translateX(6px);} }
+  .shake { animation: shake 0.35s ease; }
+  html, body, #root { height: 100%; }
+  body { margin: 0; -webkit-tap-highlight-color: transparent; overscroll-behavior: none; }
+  @media print {
+    body * { visibility: hidden; }
+    #receipt-print, #receipt-print * { visibility: visible; }
+    #receipt-print { position: fixed; top: 0; left: 0; width: 100%; }
+  }
+</style>
+</head>
+<body>
+<script>
+  function showBootError(msg) {
+    var el = document.getElementById("root");
+    if (el) {
+      el.innerHTML = '<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;background:#0B1120;padding:24px;">' +
+        '<pre style="color:#FB7185;background:rgba(251,113,133,0.08);border:1px solid rgba(251,113,133,0.3);' +
+        'padding:16px;border-radius:12px;white-space:pre-wrap;max-width:520px;font-size:12px;font-family:monospace;">' +
+        'DigiKhata failed to load:\n\n' + msg + '</pre></div>';
+    }
+  }
+  window.addEventListener("error", function (e) { showBootError((e && e.message) || String(e)); });
+  window.addEventListener("unhandledrejection", function (e) {
+    showBootError((e && e.reason && (e.reason.message || e.reason)) || "Unhandled promise rejection");
+  });
+</script>
+<div id="root">
+  <div id="boot-status" style="min-height:100vh;display:flex;align-items:center;justify-content:center;background:#0B1120;color:#8D9AB0;font-family:sans-serif;font-size:14px;text-align:center;padding:24px;">
+    Loading DigiKhata…
+  </div>
+</div>
+<script src="vendor/app.bundle.js"></script>
+<script>
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("sw.js").catch(() => {});
+    });
+  }
+</script>
+</body>
+</html>
